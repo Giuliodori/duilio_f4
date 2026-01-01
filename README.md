@@ -2,10 +2,12 @@
   <img src="docs/images/logo_duilio.png" width="600">
 </p>
               
-
 <p align="center">
-  <img src="docs/images/duilio_f4_top.png" width="600">
+  <img src="docs/images/duilio_f4_top.png" width="45%">
+  &nbsp;&nbsp;&nbsp;
+  <img src="docs/images/duilio_f4_bottom.png" width="45%">
 </p>
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/MCU-STM32F411-blue">
