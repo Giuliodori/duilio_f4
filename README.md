@@ -298,6 +298,13 @@ duilio/
 
 This structure will evolve as the project grows.
 ```
+## Project governance
+
+See also:
+- [CONTRIBUTING.md](./CONTRIBUTING.md) — how to contribute
+- [SECURITY.md](./SECURITY.md) — responsible disclosure and safety
+- [CHANGELOG.md](./CHANGELOG.md) — project history
+
 ---
 © 2026 Fabio Giuliodori — Duilio Project
 
