@@ -18,29 +18,48 @@
 </p>
 
 # DUILIO F4 — Motion Control Board
-**Modular STM32F411-based motion and I/O control board for robotics and distributed systems**
+**A purpose-built motion and I/O control board for real-world machines**
 
-**Duilio F4** is a modular control board designed for real-world robotic and mechatronic applications.
+**Duilio F4** is a **ready-to-use motion control board**, designed to reliably command external motor drivers
+in robotic and mechatronic systems.
 
-Instead of locking users into a specific power stage or motor topology,  
-Duilio F4 allows you to **choose the most suitable external motor driver** and adapt the control logic accordingly.
+It is **not a generic development board**.
+Duilio F4 combines **robust hardware**, **pre-developed firmware** and a dedicated configuration tool
+to control motors and I/O without writing application code.
+
+Instead of forcing a specific motor topology or power stage,
+Duilio F4 lets you **select the most suitable external motor driver**
+and adapts the control logic through predefined profiles.
+
+Configuration and customization are handled through **Duilio Tools**:
+a dedicated software that allows users to:
+- configure the board with a few clicks
+- adapt it to different drivers and machines
+- perform advanced graphical debugging
+- work **without writing a single line of code**
 
 It can be used:
-- as a **standalone controller**
-- as an **expansion board for Raspberry Pi**
+- as a **standalone motion controller**
+- as a **USB-controlled device** driven by a PC or single-board computer
+- as a **Raspberry Pi HAT**
 - as part of a **distributed multi-board system** using a robust communication bus
 
-The same board can scale from simple projects to complex machines with many motors and peripherals.
+Duilio F4 is designed for engineers and makers who want to build machines,
+not spend weeks writing low-level control code.
+It is designed for system development, prototyping
+and integration into custom machines and robotic platforms.
+
 
 ---
 
 ## Status
 
-- **Hardware**: Prototype (first production run in progress)
-- **Firmware**: Under active development
-- **Tools**: Planned / early development
+- **Hardware**: Third-generation prototype, with multiple production iterations completed
+- **Firmware**: Actively developed and tested on real hardware
+- **Duilio Tools**: Operational and in active use, currently being adapted to the new 64-pin STM32 platform
 
-Documentation and software will be published progressively as the hardware is validated.
+Documentation and software are being published progressively
+as the current hardware validation phase advances.
 
 ---
 
@@ -79,28 +98,123 @@ while the host system provides high-level logic, user interfaces or networking.
 ---
 
 ### Motor control flexibility
-Duilio F4 supports a wide range of external motor drivers, including:
 
-- DC motors (brushed)
+Duilio F4 is designed to **turn simple, robust and cost-effective motor drivers
+into fully featured motion control systems**.
+
+Rather than implementing motor power stages directly, Duilio F4 adds intelligence,
+coordination and safety on top of widely available external drivers.
+
+It supports a broad range of driver interfaces, including:
+
+- DC motor drivers (brushed)
 - BLDC motor drivers
-- common **PWM / DIR** drivers
+- **PWM / DIR** drivers
+- **PWM forward / PWM reverse (PWMF / PWMR)** drivers
+- analog speed + direction drivers
 - industrial drivers using enable, direction and speed signals
 
-Typical control modes include:
-- speed control and limiting
-- position control
-- mixed configurations (different modes on different motors)
+Thanks to this approach, inexpensive and rugged drivers can be used
+in applications that normally require far more complex controllers.
 
-Duilio F4 does not implement a single fixed motor control strategy.
+#### Advanced motion features
 
-Each external driver is associated with a **control profile**, defining:
-- signal types (PWM, DIR, ENABLE, analog, serial)
-- scaling and operating limits
-- safety and fail-safe behavior
+Depending on the selected control profile, Duilio F4 can provide:
 
-This allows the same firmware architecture to be reused across very different projects.
+- acceleration and deceleration ramps
+- speed limiting and soft limits
+- motion mixing (e.g. differential drive, coordinated axes)
+- position control and positioning logic
+- configurable safety behaviors and interlocks
+
+Position feedback can be handled using multiple strategies, including:
+- relative position tracking
+- absolute position sensing
+- external encoders or sensors
+- hybrid approaches combining multiple feedback sources
+
+#### Profile-based control architecture
+
+Duilio F4 does not rely on a single fixed motor control strategy.
+
+Each external driver is associated with a **control profile** that defines:
+- signal interfaces (PWM, DIR, ENABLE, analog, serial)
+- scaling, limits and dynamic behavior
+- acceleration profiles and motion constraints
+- safety rules and fail-safe actions
+- optional position and telemetry handling
+
+This allows the same firmware and hardware platform to adapt to
+very different machines and driver types,
+while maintaining predictable behavior and robust safety logic.
+
+As a result, Duilio F4 can scale from simple motor control tasks
+to complex multi-axis and coordinated motion systems
+without changing the overall architecture.
+
+### Driver compatibility
+
+Duilio F4 is designed to work with a wide range of **simple, robust and widely available motor drivers**.
+
+Rather than targeting a limited set of proprietary controllers,
+Duilio F4 adapts to common control interfaces used by many DC and BLDC drivers.
+
+The following driver types are **supported or supportable**, depending on the selected control profile
+and available feedback signals.
+
+#### Supported driver interface types
+
+**Digital control drivers**
+- PWM + DIR
+- PWM forward / PWM reverse (PWMF / PWMR)
+- ENABLE + DIR + PWM
+- STEP + DIR (speed-based or position-based usage)
+- dual-PWM speed control
+
+**Analog control drivers**
+- analog speed input (0–5 V, 0–10 V via external conditioning)
+- analog speed + direction
+- mixed analog/digital interfaces
+
+**RC-style drivers**
+- standard RC PWM input (servo-style pulse width)
+- electronic speed controllers (ESC) with forward / reverse support
+
+**Serial or protocol-based drivers**
+- simple serial-controlled drivers
+- custom or proprietary serial protocols (profile-dependent)
 
 ---
+
+#### Typical compatible driver categories
+
+Duilio F4 can be used with:
+
+- low-cost DC motor driver modules
+- industrial DC motor controllers
+- brushed motor H-bridge drivers
+- BLDC motor drivers with external speed/direction inputs
+- ESCs accepting RC PWM signals
+- custom motor drivers exposing basic control signals
+
+In many cases, drivers originally intended for manual or open-loop control
+can be upgraded into closed-loop or coordinated systems
+by combining them with Duilio F4 motion logic and feedback handling.
+
+---
+
+#### Notes on compatibility
+
+- Duilio F4 does **not** require drivers to implement complex protocols
+- drivers only need to expose basic speed, direction or enable signals
+- feedback signals (encoders, sensors, limit switches) can be added externally
+- compatibility is defined through **control profiles**, not hardcoded driver models
+
+This approach allows Duilio F4 to remain flexible,
+future-proof and adaptable to new driver types as they become available.
+
+---
+
 ### Power supply and system integration
 
 Duilio F4 is designed to greatly simplify power distribution in robotic and mechatronic systems.
@@ -110,7 +224,7 @@ The board supports multiple power input scenarios:
 - **Wide input supply (VIN)** from **6 V to 43 V**
 - **5 V supply from USB**
 - **5 V supply from a Raspberry Pi** when used as a HAT
-- 
+
 The board automatically manages the active power source,
 preventing back-feeding between VIN, USB and Raspberry Pi supplies.
 
@@ -304,6 +418,12 @@ See also:
 - [CONTRIBUTING.md](./CONTRIBUTING.md) — how to contribute
 - [SECURITY.md](./SECURITY.md) — responsible disclosure and safety
 - [CHANGELOG.md](./CHANGELOG.md) — project history
+
+
+## Collaboration
+
+Open to collaboration supporting the next development phases
+of the Duilio platform.
 
 ---
 © 2026 Fabio Giuliodori — Duilio Project
