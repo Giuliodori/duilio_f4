@@ -1,4 +1,4 @@
-z<p align="center">
+<p align="center">
   <img src="docs/images/logo_duilio.png" width="600">
 </p>
 
