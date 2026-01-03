@@ -16,36 +16,119 @@
 </p>
 
 # DUILIO F4 — Motion Control Board
-The wheel is already there.
-**Duilio turns motor drivers into real motion control.**
+**The wheel is already there. Duilio makes it move right.**
 
-In robotics and mechatronics, the real challenge is not driving motors,
-but turning simple motor drivers into reliable, coordinated and safe motion systems.
+You already have motors and drivers.  
+What’s missing is **reliable, coordinated and safe motion control**.
 
-Duilio F4 solves this problem by **removing the need to reinvent control logic**:
-it transforms basic, rugged or industrial motor drivers into advanced motion controllers
-**without writing custom control firmware**.
+Duilio F4 sits between your control source (RC receiver, PC, Raspberry Pi or SBCs) and **any external motor driver**, adding motion logic that usually gets reinvented every time: ramps, limits, coordination and failsafe.
 
-Duilio F4 is a **ready-to-use motion control board** that sits between
-control sources (RC receivers, PCs, Raspberry Pi and other SBCs)
-and **external motor drivers**, adding intelligence, coordination and safety.
+## What can you build with Duilio F4?
 
-It is **not a generic development board**.
-Duilio F4 combines robust hardware, pre-developed firmware
-and a dedicated configuration tool (**Duilio Tools**)
-to configure motors and I/O **without writing application code**.
+- **RC vehicles and machines**  
+  Cars, boats, tracked vehicles, robotic platforms, remote lawn mowers.
 
-Instead of forcing a specific motor topology or power stage,
-Duilio F4 lets you choose the most suitable external driver
-(PWM/DIR, analog, RC-style or industrial interfaces)
-and adapts the control behavior through **predefined control profiles**.
+- **Robots and mechatronic systems**  
+  Differential drive, skid-steer, articulated mechanisms, linear actuators.
 
-This allows inexpensive, rugged or industrial drivers
-to behave like fully featured motion controllers,
-with acceleration ramps, limits, mixers, positioning logic and failsafe handling.
+- **Custom servo motors of any power**  
+  Turn **any motor + any driver** into a servo-like axis with limits, ramps and safety.
+
+- **Rugged or industrial motion systems**  
+  Consistent motion behavior using inexpensive or industrial drivers.
+
+## Motors and drivers
+
+Duilio F4 is **motor-agnostic** and **driver-agnostic**.  
+If a driver can be controlled via **PWM, DIR, analog or RC-style signals**, Duilio F4 can manage it.
+
+## Why Duilio F4?
+
+Driving a motor is easy.  
+Making a machine **behave predictably and safely** is not.
+
+Duilio F4 removes the need to reinvent motion control logic, turning simple motor drivers into **real motion controllers** — without writing custom application firmware.
+
+**If you already have a motor driver, Duilio F4 makes it real motion control.**
 
 
 ---
+## Key features — detailed overview
+
+| Category | Feature | Details |
+|--------|--------|--------|
+| **MCU** | Microcontroller | STM32F411 (64-pin, Cortex-M4F) |
+| | Real-time control | Deterministic real-time motion control handled on-board |
+| | Firmware | Pre-developed, profile-based (no application code required) |
+| |
+| **Motion control** | Motor axes | **2 independent motion axes per board** |
+| | Control modes | **Speed, position and torque control** |
+| | Torque control | Via **external current sensors** |
+| | Motion features | Acceleration / deceleration ramps, limits, soft limits |
+| | Coordination | Axis coordination and motion mixing (profile-dependent) |
+| | Safety | Interlocks, watchdogs and failsafe behaviors |
+| |
+| **Scalability** | Multi-board support | Native **RS485 / CAN** multi-drop |
+| | System size | Designed for **10+ Duilio F4 boards** on the same bus |
+| | Example | **10 boards = 20 motors**, centrally coordinated |
+| | Architecture | One host, many Duilio nodes (distributed real-time control) |
+| |
+| **Motor drivers** | Driver type | External motor drivers only (no power stages on-board) |
+| | Supported interfaces | PWM/DIR |
+| | | ENABLE + DIR + PWM |
+| | | Dual-PWM (forward / reverse) |
+| | | STEP / DIR (speed or position usage) |
+| | | Analog speed (0–5 V) |
+| | | Analog speed + direction |
+| | | RC-style PWM (ESC / servo pulse) |
+| |
+| **Encoders** | Absolute encoders | **2 I²C absolute encoders** |
+| | Incremental encoders | **2 quadrature encoders (A/B)** |
+| | Index / homing | **Z channel and limit switches supported** |
+| | Usage | Position feedback, homing, zero reference |
+| |
+| **RC I/O** | RC inputs | **4 RC servo inputs** (PWM pulse capture) |
+| | RC outputs | **4 RC servo outputs** |
+| | Usage | RC receivers, ESCs, servos, mixed/manual control |
+| |
+| **Digital I/O (power)** | Power outputs | **4 NPN low-side outputs** |
+| | Load type | External relays, solenoids, lamps |
+| | Current | **< 2 A per channel** |
+| | Control | Firmware-controlled, profile-dependent |
+| |
+| **Digital I/O (logic)** | Limit switches | End-stops and safety inputs |
+| | Homing | Dedicated inputs for zeroing procedures |
+| |
+| **Analog input** | Analog channels | **2 analog inputs (0–5 V)** |
+| | Usage | Torque reference, position reference (potentiometer), analog command |
+| |
+| **Sensors** | Ultrasonic sonar | **2 ultrasonic sonar interfaces (TRIG / ECHO)** |
+| | Other sensors | Digital and analog sensors (profile-dependent) |
+| |
+| **Communication** | USB | USB device (configuration, debug, control) |
+| | UART | Host or peripheral communication |
+| | RS485 | Multi-drop deterministic bus |
+| | CAN | CAN-based distributed architectures |
+| |
+| **Host systems** | Supported hosts | Raspberry Pi, SBCs, PC, industrial computers |
+| | Role separation | Host = logic / UI / networking |
+| | | Duilio = real-time motion and I/O control |
+| |
+| **Power input** | VIN | **6 V – 43 V** |
+| | USB | 5 V from USB |
+| | Raspberry Pi | 5 V from Pi header (HAT mode) |
+| |
+| **Raspberry Pi power** | Output | Up to **5.1 V / 5 A** |
+| | Purpose | Direct Raspberry Pi power supply |
+| |
+| **Protection** | Electrical | TVS, ESD, reverse and back-feed protection |
+| | Environment | Designed for noisy motor environments |
+| |
+| **Configuration** | Tooling | **Duilio Tools** (no-code configuration) |
+| | Advanced use | Direct firmware access possible |
+| |
+| **System philosophy** | Architecture | Motor-agnostic and driver-agnostic |
+| | Reuse | Same control logic across different machines |
 
 ## Status
 - **Hardware**: Third-generation prototype, multiple production iterations completed
@@ -192,14 +275,8 @@ Advanced users remain free to bypass the tool and work directly with the firmwar
 
 ---
 
-## What Duilio F4 is not
-- not a high-power motor driver
-- no integrated motor power stages
-- no fixed control architecture
 
-Duilio F4 sits between control sources and power electronics, providing motion logic, safety, scaling and coordination.
 
----
 
 ## Planned repository structure
 ```text
