@@ -9,7 +9,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/MCU-STM32F411-blue">
   <img src="https://img.shields.io/badge/Hardware-Prototype-orange">
-  <img src="https://img.shields.io/badge/Bus-RS485%20%7C%20CAN-blueviolet">
+  <img src="https://img.shields.io/badge/Bus-RS485-blueviolet">
   <img src="https://img.shields.io/badge/Raspberry%20Pi-Compatible-red">
   <img src="https://img.shields.io/badge/Maintained-Yes-brightgreen">
   <img src="https://img.shields.io/badge/License-MIT-green">
@@ -68,14 +68,14 @@ Duilio F4 removes the need to reinvent motion control logic, turning simple moto
 | | Coordination | Axis coordination and motion mixing (profile-dependent) |
 | | Safety | Interlocks, watchdogs and failsafe behaviors |
 | |
-| **Scalability** | Multi-board support | Native **RS485 / CAN** multi-drop |
+| **Scalability** | Multi-board support | Native **RS485 multi-drop bus** |
 | | System size | Designed for **10+ Duilio F4 boards** on the same bus |
 | | Example | **10 boards = 20 motors**, centrally coordinated |
 | | Architecture | One host, many Duilio nodes (distributed real-time control) |
 | |
 | **Motor drivers** | Driver type | External motor drivers only (no power stages on-board) |
 | | Supported interfaces | PWM/DIR |
-| | | ENABLE + DIR + PWM |
+| | | ENABLE + DIR + PWM + STOP|
 | | | Dual-PWM (forward / reverse) |
 | | | STEP / DIR (speed or position usage) |
 | | | Analog speed (0–5 V) |
@@ -105,10 +105,18 @@ Duilio F4 removes the need to reinvent motion control logic, turning simple moto
 | **Sensors** | Ultrasonic sonar | **2 ultrasonic sonar interfaces (TRIG / ECHO)** |
 | | Other sensors | Digital and analog sensors (profile-dependent) |
 | |
-| **Communication** | USB | USB device (configuration, debug, control) |
-| | UART | Host or peripheral communication |
-| | RS485 | Multi-drop deterministic bus |
-| | CAN | CAN-based distributed architectures |
+| **Safety & failsafe** | Communication loss | Safe state on communication timeout |
+| | | Configurable behavior on host or bus loss |
+| | Startup safety | Motion enabled only after valid startup sequence |
+| | | Optional gesture-based or multi-condition enable |
+| | Interlocks | Hardware and firmware safety interlocks |
+| | Emergency handling | Immediate output disable on fault conditions |
+| | Watchdog | Internal watchdog and supervision logic |
+| | Default state | Outputs forced to safe state at power-up |
+| |
+| **Configuration** | Programming interface | **ST-Link (SWD)** |
+| | Configuration method | Firmware flashing and configuration via ST-Link |
+| | USB | Optional / experimental, not the primary configuration interface |
 | |
 | **Host systems** | Supported hosts | Raspberry Pi, SBCs, PC, industrial computers |
 | | Role separation | Host = logic / UI / networking |
