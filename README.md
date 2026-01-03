@@ -16,13 +16,14 @@
 </p>
 
 # DUILIO F4 — Motion Control Board
-**A purpose-built motion and I/O control board for machines built around external motor drivers**
+**After the wheel, real motion control.**
+Turning simple motor drivers into reliable, coordinated motion systems.
 
-In robotics and mechatronics, a recurring problem is not driving motors,
+In robotics and mechatronics, the real challenge is not driving motors,
 but turning simple motor drivers into reliable, coordinated and safe motion systems.
 
 Duilio F4 solves this problem by **removing the need to reinvent control logic**:
-it transforms basic, robust or industrial motor drivers into advanced motion controllers
+it transforms basic, rugged or industrial motor drivers into advanced motion controllers
 **without writing custom control firmware**.
 
 Duilio F4 is a **ready-to-use motion control board** that sits between
@@ -43,16 +44,6 @@ This allows inexpensive, rugged or industrial drivers
 to behave like fully featured motion controllers,
 with acceleration ramps, limits, mixers, positioning logic and failsafe handling.
 
-Duilio F4 can be used as:
-- a **standalone motion controller** (RC receivers, potentiometers, local inputs)
-- a **USB-controlled device** driven by a PC or single-board computer
-- a **Raspberry Pi HAT**
-- a **node in a distributed multi-board system** over a robust communication bus
-
-Duilio F4 is designed for engineers and makers who want to **build machines**,
-not spend weeks writing low-level control code.
-It targets system development, prototyping and integration
-into custom machines and robotic platforms.
 
 ---
 
