@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-  <img src="docs/images/duilio_f4_top.png" style="display:block; margin:auto; width:100%;">
+  <img src="docs/images/duilio_f4_top.png" style="display:block; margin:auto; width:95%;">
 </div>
 
 <p align="center">
