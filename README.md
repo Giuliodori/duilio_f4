@@ -83,6 +83,39 @@ This configuration applies to **many common motor drivers**, not only ZS-X11.
 - PWM frequency and logic level are configurable  
 - The same wiring concept applies to many industrial and hobby drivers
 
+---
+
+## Example wiring — Servo-style / Dual-PWM driver with closed-loop positioning  
+### (BTS7960 / IBT-2 + dual I²C absolute encoders)
+
+This example shows a **closed-loop positioning setup** using Duilio F4 with:
+
+- **servo-style / dual-PWM motor drivers** (BTS7960 / IBT-2 style)
+- **two absolute I²C 14-bit encoders (MT6701)**  
+- **on-board PID control** for precise positioning
+
+Each motor axis is equipped with its own absolute encoder, allowing:
+- precise position feedback
+- repeatable homing without mechanical end-stops
+- stable PID-controlled motion
+
+<p align="center">
+  <img src="docs/images/schema_servo_bts6970.svg" width="90%">
+</p>
+
+**Encoder details:**
+- Type: **MT6701 absolute magnetic encoder**
+- Resolution: **14-bit (16384 positions per revolution)**
+- Interface: **I²C**
+- Each axis uses one dedicated encoder
+
+**Notes:**
+- Forward and reverse motion are handled by **two PWM signals**
+- ENABLE remains available as a **global safety gate**
+- PID loop runs **locally on Duilio**, independent of the host
+- Positioning accuracy depends on mechanical transmission and encoder mounting
+
+
 ## Key features — detailed overview
 
 | Category | Feature | Details |
