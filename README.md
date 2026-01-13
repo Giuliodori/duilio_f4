@@ -32,7 +32,6 @@ Duilio F4 interfaces with control sources (RC receivers, PCs, Raspberry Pi or SB
 Duilio F4 is a **development board** intended for **makers, advanced hobbyists and developers**,  
 designed for **prototyping, experimentation and motion-control architecture development**.
 
-It is **not currently certified as an industrial controller** and **not intended for safety-critical or life-critical applications**.
 
 ---
 
@@ -67,6 +66,23 @@ Duilio F4 removes the need to reinvent motion control logic, turning simple moto
 
 
 ---
+
+## Example wiring — PWM/DIR motor driver (ZS-X11 style)
+
+The diagram below shows a **typical and minimal wiring** between Duilio F4 and a PWM/DIR motor driver  
+(ZS-X11–style logic, ENABLE + DIR + PWM).
+
+This configuration applies to **many common motor drivers**, not only ZS-X11.
+
+<p align="center">
+  <img src="docs/images/schema_zs_x11.svg" width="90%">
+</p>
+
+**Notes:**
+- ENABLE is strongly recommended for failsafe behavior  
+- PWM frequency and logic level are configurable  
+- The same wiring concept applies to many industrial and hobby drivers
+
 ## Key features — detailed overview
 
 | Category | Feature | Details |
