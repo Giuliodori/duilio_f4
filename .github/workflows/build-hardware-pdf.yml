@@ -1,69 +1,39 @@
-name: Build Hardware PDF
-
-on:
-  push:
-    paths:
-      - "docs/hardware/**"
-      - "docs/images/**"
-      - ".github/workflows/build-hardware-pdf.yml"
-  workflow_dispatch:
-
-jobs:
-  build-pdf:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Check referenced images exist
+      - name: Build PDF with Pandoc (LaTeX)
         shell: bash
         run: |
           set -euo pipefail
-          echo "Scanning markdown for image references (../images/...)"
 
-          refs=$(grep -RhoE '\(\.\./images/[^\)]+\)' docs/hardware/*.md | tr -d '()' | sort -u || true)
-
-          if [ -z "${refs}" ]; then
-            echo "No image references found."
-            exit 0
-          fi
-
-          echo "Found references:"
-          echo "${refs}"
+          echo "Repo root:"
+          pwd
+          echo ""
+          echo "Listing docs folder:"
+          ls -la docs || true
+          echo ""
+          echo "Listing docs/hardware folder:"
+          ls -la docs/hardware || true
           echo ""
 
-          echo "Checking files exist..."
-          while IFS= read -r rel; do
-            # Make an absolute-ish normalized path (no filesystem access needed with -m)
-            norm=$(realpath -m "docs/hardware/${rel}")
+          FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort)
+          if [ -z "$FILES" ]; then
+            echo "ERROR: No markdown files found in docs/hardware"
+            exit 1
+          fi
 
-            if [ ! -f "$norm" ]; then
-              echo "MISSING: ${rel} -> ${norm}"
-              exit 1
-            fi
-          done <<< "${refs}"
+          echo "Building PDF from:"
+          echo "$FILES"
 
-          echo "All referenced images exist."
+          docker run --rm \
+            -v "$PWD:/data" \
+            -w /data \
+            pandoc/latex:latest \
+            -f markdown \
+            --toc --toc-depth=2 \
+            --verbose \
+            --pdf-engine=xelatex \
+            -V geometry:margin=2.5cm \
+            -o DUILIO_F4_Hardware_Deep_Manual.pdf \
+            $FILES
 
-      - name: Build PDF with Pandoc (LaTeX)
-        uses: docker://pandoc/latex:latest
-        with:
-          args: >-
-            -f markdown
-            --toc
-            --toc-depth=2
-            --verbose
-            --pdf-engine=xelatex
-            -V geometry:margin=2.5cm
-            -o DUILIO_F4_Hardware_Deep_Manual.pdf
-            docs/hardware/*.md
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: DUILIO_F4_Hardware_Deep_Manual
-          path: DUILIO_F4_Hardware_Deep_Manual.pdf
 
 
 
