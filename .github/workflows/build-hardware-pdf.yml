@@ -31,7 +31,7 @@
             --verbose \
             --pdf-engine=xelatex \
             -V geometry:margin=2.5cm \
-            -o DUILIO_F4_Hardware_Deep_Manual.pdf \
+            -o DUILIO_F4_User_Manual.pdf \
             $FILES
 
 
