@@ -1,25 +1,36 @@
-      - name: Build PDF with Pandoc (LaTeX)
-        shell: bash
-        run: |
-          set -euo pipefail
+name: Build Hardware PDF
 
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "docs/hardware/**"
+      - "docs/images/**"
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Debug paths
+        run: |
           echo "Repo root:"
           pwd
-          echo ""
-          echo "Listing docs folder:"
+          echo "Tree:"
+          ls -la
+          echo "docs:"
           ls -la docs || true
-          echo ""
-          echo "Listing docs/hardware folder:"
+          echo "docs/hardware:"
           ls -la docs/hardware || true
-          echo ""
 
+      - name: Build PDF with Pandoc (Docker)
+        run: |
+          set -e
           FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort)
-          if [ -z "$FILES" ]; then
-            echo "ERROR: No markdown files found in docs/hardware"
-            exit 1
-          fi
-
-          echo "Building PDF from:"
+          echo "Using files:"
           echo "$FILES"
 
           docker run --rm \
@@ -27,13 +38,18 @@
             -w /data \
             pandoc/latex:latest \
             -f markdown \
-            --toc --toc-depth=2 \
-            --verbose \
+            --toc \
+            --toc-depth=2 \
             --pdf-engine=xelatex \
             -V geometry:margin=2.5cm \
-            -o DUILIO_F4_User_Manual.pdf \
+            -o DUILIO_F4_Hardware_Deep_Manual.pdf \
             $FILES
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DUILIO_F4_Hardware_Deep_Manual
+          path: DUILIO_F4_Hardware_Deep_Manual.pdf
 
 
 
