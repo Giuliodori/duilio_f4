@@ -25,6 +25,8 @@ jobs:
           ls -la docs || true
           echo "docs/hardware:"
           ls -la docs/hardware || true
+          echo "docs/images:"
+          ls -la docs/images || true
 
       - name: Build PDF with Pandoc (Docker)
         run: |
@@ -40,16 +42,18 @@ jobs:
             -f markdown \
             --toc \
             --toc-depth=2 \
+            --resource-path=docs/hardware:docs/images:docs \
             --pdf-engine=xelatex \
             -V geometry:margin=2.5cm \
-            -o DUILIO_F4_Hardware_Deep_Manual.pdf \
+            -o Duilio_F4_User_Manual.pdf \
             $FILES
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DUILIO_F4_Hardware_Deep_Manual
-          path: DUILIO_F4_Hardware_Deep_Manual.pdf
+          name: Duilio_F4_User_Manual
+          path: Duilio_F4_User_Manual.pdf
+
 
 
 
