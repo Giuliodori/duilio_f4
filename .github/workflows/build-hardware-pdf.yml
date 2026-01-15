@@ -12,9 +12,15 @@ jobs:
   build-pdf:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Build PDF with Pandoc (Docker)
         shell: bash
@@ -55,10 +61,13 @@ jobs:
           path: docs/hardware/releases/Duilio_F4_User_Manual.pdf
 
       - name: Commit PDF to repository
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Auto-build: update Duilio_F4_User_Manual.pdf"
           file_pattern: docs/hardware/releases/Duilio_F4_User_Manual.pdf
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+
 
 
 
