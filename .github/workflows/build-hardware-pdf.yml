@@ -1,0 +1,34 @@
+name: Build Hardware PDF
+
+on:
+  push:
+    paths:
+      - "docs/hardware/**"
+      - "docs/images/**"
+      - ".github/workflows/build-hardware-pdf.yml"
+  workflow_dispatch:
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build PDF with Pandoc (LaTeX included)
+        uses: docker://pandoc/latex:latest
+        with:
+          args: >-
+            -f markdown
+            --toc
+            --toc-depth=2
+            -V geometry:margin=2.5cm
+            -o DUILIO_F4_Hardware_Deep_Manual.pdf
+            docs/hardware/*.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DUILIO_F4_Hardware_Deep_Manual
+          path: DUILIO_F4_Hardware_Deep_Manual.pdf
