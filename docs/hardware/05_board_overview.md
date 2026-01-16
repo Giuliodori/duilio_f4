@@ -26,3 +26,11 @@ This separation reduces coupling from high-current paths and simplifies inspecti
 Protection components are grouped near the power entry and the external-facing connectors. This includes current protection on low-power rails and protection elements on exposed interfaces.
 
 Status indication and service access points are placed on the top side for visibility during bring-up and diagnostics. These features allow quick confirmation of board state without probing internal circuitry.
+
+## 5.5 Mechanical drawing and dimensions
+
+The following drawing provides the overall board dimensions and mounting references.
+It is intended for mechanical integration, enclosure design, and panel mounting.
+
+![DUILIO F4 mechanical drawing](../images/duilio_f4_drawing.svg)
+
