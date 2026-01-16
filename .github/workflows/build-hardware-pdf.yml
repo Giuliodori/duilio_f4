@@ -19,17 +19,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           mkdir -p docs/hardware/releases
-
-          FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort)
-          echo "Using markdown files:"
-          echo "$FILES"
-
-          if [ -z "$FILES" ]; then
-            echo "ERROR: no markdown files found in docs/hardware"
-            exit 1
-          fi
 
           docker run --rm \
             --entrypoint bash \
@@ -39,7 +29,12 @@ jobs:
             -lc '
               set -euo pipefail
 
-              # Install fonts + fontconfig (inside the container)
+              echo "Inside container:"
+              pwd
+              ls -la docs/hardware || true
+              ls -la docs/images || true
+
+              # Install fonts + fontconfig (inside container)
               if command -v apt-get >/dev/null 2>&1; then
                 apt-get update -y >/dev/null
                 apt-get install -y --no-install-recommends fontconfig fonts-dejavu-core fonts-dejavu-extra >/dev/null
@@ -48,9 +43,18 @@ jobs:
                 apk add --no-cache fontconfig ttf-dejavu >/dev/null
                 fc-cache -f >/dev/null || true
               else
-                echo "ERROR: neither apt-get nor apk found in container; cannot install fonts."
+                echo "ERROR: neither apt-get nor apk found; cannot install fonts."
                 exit 1
               fi
+
+              # Build file list INSIDE the container (avoids host quoting issues)
+              FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort | tr "\n" " ")
+              if [ -z "$FILES" ]; then
+                echo "ERROR: no markdown files found in docs/hardware"
+                exit 1
+              fi
+
+              echo "Using markdown files: $FILES"
 
               pandoc \
                 -f markdown \
@@ -63,7 +67,7 @@ jobs:
                 -V monofont="DejaVu Sans Mono" \
                 -V fontsize=11pt \
                 -o docs/hardware/releases/Duilio_F4_User_Manual.pdf \
-                '"$FILES"'
+                $FILES
             '
 
       - name: Upload PDF artifact
