@@ -1,111 +1,73 @@
-﻿2026-01-16T04:15:35.1320289Z ##[group]Run set -euo pipefail
-set -euo pipefail
+name: Build Hardware PDF
 
-mkdir -p docs/hardware/releases
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "docs/hardware/**"
+      - "docs/images/**"
 
-FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort)
-echo "Using markdown files:"
-echo "$FILES"
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
 
-if [ -z "$FILES" ]; then
-  echo "ERROR: no markdown files found in docs/hardware"
-  exit 1
-fi
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-docker run --rm \
-  -v "$PWD:/data" \
-  -w /data \
-  pandoc/latex:latest \
-  bash -lc '
-    set -euo pipefail
+      - name: Build PDF with Pandoc (Docker) + DejaVu fonts
+        shell: bash
+        run: |
+          set -euo pipefail
 
-    # Install fonts + fontconfig (inside the container)
-    if command -v apt-get >/dev/null 2>&1; then
-      apt-get update -y >/dev/null
-      apt-get install -y --no-install-recommends fontconfig fonts-dejavu-core fonts-dejavu-extra >/dev/null
-      fc-cache -f >/dev/null
-    elif command -v apk >/dev/null 2>&1; then
-      apk add --no-cache fontconfig ttf-dejavu >/dev/null
-      fc-cache -f >/dev/null || true
-    else
-      echo "ERROR: neither apt-get nor apk found in container; cannot install fonts."
-      exit 1
-    fi
+          mkdir -p docs/hardware/releases
 
-    pandoc \
-      -f markdown \
-      --toc \
-      --toc-depth=2 \
-      --resource-path=docs/hardware:docs/images:docs \
-      --pdf-engine=xelatex \
-      -V geometry:margin=2.5cm \
-      -V mainfont="DejaVu Sans" \
-      -V monofont="DejaVu Sans Mono" \
-      -V fontsize=11pt \
-      -o docs/hardware/releases/Duilio_F4_User_Manual.pdf \
-      '"$FILES"'
-  '
-shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
-Using markdown files:
-docs/hardware/00_front_matter.md
-docs/hardware/01_introduction.md
-docs/hardware/02_features_specs.md
-docs/hardware/03_safety.md
-docs/hardware/04_power_system.md
-docs/hardware/05_board_overview.md
-docs/hardware/06_connectors_pinout.md
-docs/hardware/07_function_usage.md
-docs/hardware/08_connection_diagrams.md
-docs/hardware/09_communication_rs485.md
-docs/hardware/10_advanced_hw_config.md
-docs/hardware/11_debug_service.md
-docs/hardware/12_appendices.md
-Unable to find image 'pandoc/latex:latest' locally
-latest: Pulling from pandoc/latex
-014e56e61396: Pulling fs layer
-7e162f6b04b9: Pulling fs layer
-693a1850c5d7: Pulling fs layer
-05dac755ecae: Pulling fs layer
-205549ba22e8: Pulling fs layer
-759e9b7dd0d3: Pulling fs layer
-ee116da73cdb: Pulling fs layer
-313de8d4eba5: Pulling fs layer
-56e4d5a64251: Pulling fs layer
-759e9b7dd0d3: Waiting
-ee116da73cdb: Waiting
-05dac755ecae: Waiting
-313de8d4eba5: Waiting
-56e4d5a64251: Waiting
-205549ba22e8: Waiting
-7e162f6b04b9: Verifying Checksum
-7e162f6b04b9: Download complete
-014e56e61396: Verifying Checksum
-014e56e61396: Download complete
-05dac755ecae: Verifying Checksum
-05dac755ecae: Download complete
-014e56e61396: Pull complete
-205549ba22e8: Verifying Checksum
-205549ba22e8: Download complete
-7e162f6b04b9: Pull complete
-759e9b7dd0d3: Verifying Checksum
-759e9b7dd0d3: Download complete
-693a1850c5d7: Verifying Checksum
-693a1850c5d7: Download complete
-313de8d4eba5: Verifying Checksum
-313de8d4eba5: Download complete
-ee116da73cdb: Verifying Checksum
-ee116da73cdb: Download complete
-693a1850c5d7: Pull complete
-05dac755ecae: Pull complete
-205549ba22e8: Pull complete
-759e9b7dd0d3: Pull complete
-56e4d5a64251: Verifying Checksum
-56e4d5a64251: Download complete
-ee116da73cdb: Pull complete
-313de8d4eba5: Pull complete
-56e4d5a64251: Pull complete
-Digest: sha256:45e505f7ad7b858a400ddccd600272330b75d3c888ed060de33400deaff94cdc
-Status: Downloaded newer image for pandoc/latex:latest
-Unknown option -l.
-Try pandoc --help for more information.
-Process completed with exit code 6.
+          FILES=$(find docs/hardware -maxdepth 1 -name "*.md" | sort)
+          echo "Using markdown files:"
+          echo "$FILES"
+
+          if [ -z "$FILES" ]; then
+            echo "ERROR: no markdown files found in docs/hardware"
+            exit 1
+          fi
+
+          docker run --rm \
+            --entrypoint bash \
+            -v "$PWD:/data" \
+            -w /data \
+            pandoc/latex:latest \
+            -lc '
+              set -euo pipefail
+
+              # Install fonts + fontconfig (inside the container)
+              if command -v apt-get >/dev/null 2>&1; then
+                apt-get update -y >/dev/null
+                apt-get install -y --no-install-recommends fontconfig fonts-dejavu-core fonts-dejavu-extra >/dev/null
+                fc-cache -f >/dev/null
+              elif command -v apk >/dev/null 2>&1; then
+                apk add --no-cache fontconfig ttf-dejavu >/dev/null
+                fc-cache -f >/dev/null || true
+              else
+                echo "ERROR: neither apt-get nor apk found in container; cannot install fonts."
+                exit 1
+              fi
+
+              pandoc \
+                -f markdown \
+                --toc \
+                --toc-depth=2 \
+                --resource-path=docs/hardware:docs/images:docs \
+                --pdf-engine=xelatex \
+                -V geometry:margin=2.5cm \
+                -V mainfont="DejaVu Sans" \
+                -V monofont="DejaVu Sans Mono" \
+                -V fontsize=11pt \
+                -o docs/hardware/releases/Duilio_F4_User_Manual.pdf \
+                '"$FILES"'
+            '
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Duilio_F4_User_Manual
+          path: docs/hardware/releases/Duilio_F4_User_Manual.pdf
