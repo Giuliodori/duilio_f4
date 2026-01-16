@@ -47,7 +47,7 @@ Motion behavior such as **ramps, limits, coordination and safe states** is handl
 
 ## Motors and drivers
 
-Duilio F4 is **motor-agnostic** and **driver-agnostic**.
+Motor- and driver-agnostic: works with different motors and external drivers using the same control logic.
 
 If a motor driver can be controlled via **PWM, DIR, analog or RC-style signals**, Duilio F4 can manage it — including **multiple drivers simultaneously**.
 
