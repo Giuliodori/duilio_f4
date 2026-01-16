@@ -9,6 +9,7 @@ DUILIO F4 is a **control board**. It has **no power stages** on-board and is int
 
 DUILIO F4 can be supplied from a wide input **VIN (6 V to 43 V)** which is regulated to 5 V for logic and auxiliary rails.
 VIN is for the **control electronics and low-power outputs only**. It is **not** a motor supply.
+Input transient protection is provided on VIN, but requires an external fuse for correct operation.
 
 WARNING: Do not route motor power through DUILIO F4.
 
@@ -16,7 +17,8 @@ WARNING: Do not route motor power through DUILIO F4.
 > - Individual pin current ratings are maximum limits, not guarantees.
 > - The sum of all output currents depends on the active power source.
 > - When powered from VIN: total available 5 V current approx. 3 A continuous, 5 A peak (shared).
-> - When powered ONLY from USB or Raspberry Pi GPIO: total available 5 V current < 0.8 A.
+>- When powered ONLY from USB or Raspberry Pi GPIO: total available 5 V current is typically < 0.8 A and depends on the actual current capability of the USB source or Raspberry Pi supply.
+
 > - Exceeding the total budget may cause voltage drop, reset, or thermal shutdown.
 
 ## 4.2 Power scenarios
@@ -106,3 +108,53 @@ WARNING: Do not change solder jumpers while the board is powered.
 This can create short circuits or unsafe power paths.
 
 Advanced jumper configurations are covered in Chapter 10.
+
+DUILIO F4 integrates on-board protection elements intended to improve robustness against wiring errors and transient events.
+These protections are **not a replacement for proper external power design**.
+
+## 4.9 Power input protection and current limiting
+
+### Input transient protection (TVS diode)
+
+The main VIN input is protected by a **TVS diode connected in parallel** to the supply rails.
+This device clamps high-voltage transients and protects the board against short overvoltage events and supply spikes.
+
+To operate correctly, the TVS diode **requires an external fuse** installed upstream of the board power input.
+Without an upstream fuse, the TVS may be forced to dissipate excessive energy during a fault condition.
+
+**Recommended external protection:**
+- One fuse in series with VIN
+- Typical rating: **2 A to 5 A**, depending on supply capability and application
+- Fast or automotive-type fuse recommended
+
+The external fuse ensures that, in the event of sustained overvoltage or reverse-energy conditions, the fault is safely cleared.
+
+### 5 V rail protection (PTC fuses)
+
+The regulated 5 V rails are protected by **two independent resettable PTC fuses**.
+These devices limit current during overload or short-circuit conditions and automatically recover once the fault is removed.
+
+PTC protection is applied to:
+- The 5 V rail feeding RC servos and external peripherals
+- The internal 5 V logic distribution
+
+Each rail is protected by a **PTC fuse with a nominal hold current of approximately 2 A**.
+PTC fuses are intended to **limit fault current**, not to regulate power.
+
+Under sustained overload or high peak current, the voltage may drop and the PTC may trip temporarily until the fault is removed and the device cools down.
+
+
+### Raspberry Pi power jumper and PTC bypass
+
+When the Raspberry Pi 5 V solder jumper is **left open**, the 5 V rail supplying the Pi is protected by the PTC fuse.
+
+When the solder jumper is **closed**, the PTC fuse is **bypassed** in order to provide the maximum available current to the Raspberry Pi.
+This configuration is intended for applications requiring high peak current (e.g. Raspberry Pi 4 / 5 under load).
+
+**Important considerations when the jumper is closed:**
+- Current limiting relies entirely on the external power source and upstream protection
+- Adequate supply capability and wiring are mandatory
+- An external fuse on VIN is strongly recommended
+
+Improper configuration or insufficient upstream protection can lead to excessive current flow and thermal stress.
+
