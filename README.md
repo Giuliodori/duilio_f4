@@ -1,3 +1,4 @@
+
 <p align="center">
   <img src="docs/images/logo_duilio.svg" width="800">
 </p>
@@ -14,6 +15,8 @@
   <img src="https://img.shields.io/badge/Maintained-Yes-brightgreen">
   <img src="https://img.shields.io/badge/License-MIT-green">
 </p>
+
+Latest release: v0.1.0 
 
 # DUILIO F4 — Motion Control Board
 
