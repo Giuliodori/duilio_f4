@@ -214,7 +214,7 @@ A limited number of **pre-production Duilio F4 boards** will be available for:
 For the launch phase, the early access boards are expected to be available at a **very accessible price**.
 
 
-📩 **info@duilio-project.it**  
+📩 **info@duilio.cc**  
 🌐 **https://duilio.cc**
 
 ---
