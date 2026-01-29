@@ -7,7 +7,7 @@ DUILIO F4 is a **control board**. It has **no power stages** on-board and is int
 - **Servo power (5 V rail):** RC/servo output headers.
 - **Motor power:** always external. **Motor power never flows through DUILIO F4.**
 
-DUILIO F4 can be supplied from a wide input **VIN (6 V to 43 V)** which is regulated to 5 V for logic and auxiliary rails.
+DUILIO F4 can be supplied from a wide input **VIN (6 V to 43 V, 51 V absolute max)** which is regulated to 5 V for logic and auxiliary rails.
 VIN is for the **control electronics and low-power outputs only**. It is **not** a motor supply.
 Input transient protection is provided on VIN, but requires an external fuse for correct operation.
 
@@ -157,4 +157,3 @@ This configuration is intended for applications requiring high peak current (e.g
 - An external fuse on VIN is strongly recommended
 
 Improper configuration or insufficient upstream protection can lead to excessive current flow and thermal stress.
-

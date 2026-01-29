@@ -21,7 +21,7 @@ The electrical limits indicated per pin are subject to total current constraints
 | Pin number | Pin name (silkscreen) | Function | Notes |
 | --- | --- | --- | --- |
 | 1 | GND_PWR | Power ground (logic / signal reference) | 0 V reference, connect to system ground |
-| 2 | +VCC | Main supply input (+VIN) | Input, main power supply (VIN range 6-43V) |
+| 2 | +VCC | Main supply input (+VIN) | Input, main power supply (VIN range 6-43V, 51 V absolute max) |
 
 ### Connector J2 - RS485 interface
 
